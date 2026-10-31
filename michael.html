@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buat Michael</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chewy&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one centered column. Password gate first, then the note with hearts, then the reply box at the very end. */
+:root {
+  --pink: #FFE4EC;
+  --pink-deep: #FFC7DA;
+  --card: #FFF6F9;
+  --ink: #4A2236;
+  --ink-soft: #7A4A60;
+  --blue: #3F6FB8;
+  --blue-soft: #BFD6F5;
+  --gold: #B98A1E;
+  --gold-soft: #F3D98B;
+  --danger: #B3304F;
+  --font-display: 'Chewy', 'Comic Sans MS', 'Trebuchet MS', system-ui, sans-serif;
+  --font-body: 'Gaegu', 'Comic Sans MS', 'Segoe UI', system-ui, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  background-color: var(--pink);
+  background-image:
+    radial-gradient(circle at 12% 8%, var(--pink-deep) 0, transparent 38%),
+    radial-gradient(circle at 92% 70%, var(--blue-soft) 0, transparent 34%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.5;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+h1, h2 { font-family: var(--font-display); font-weight: 500; text-wrap: balance; margin: 0; }
+button, input, textarea { font: inherit; color: inherit; }
+
+.heart-art { width: min(260px, 70vw); margin: 0 auto; display: block; overflow: visible; }
+.float { animation: bob 4.2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.float.d1 { animation-delay: -1.2s; }
+.float.d2 { animation-delay: -2.4s; }
+.float.d3 { animation-delay: -3.3s; }
+@keyframes bob { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-7px) } }
+.beat { animation: beat 1.9s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes beat { 0%,100% { transform: scale(1) } 14% { transform: scale(1.06) } 28% { transform: scale(1) } 42% { transform: scale(1.04) } 56% { transform: scale(1) } }
+
+#gate { min-height: calc(100vh - 100px); display: flex; align-items: center; justify-content: center; }
+.gate-card {
+  width: 100%; max-width: 380px; text-align: center;
+  background: var(--card); border: 2px solid var(--gold-soft); border-radius: 28px;
+  padding: 28px 22px 26px; display: flex; flex-direction: column; gap: 14px;
+  box-shadow: 0 10px 30px rgba(185, 138, 30, 0.14);
+}
+.gate-card .heart-art { width: 120px; }
+.gate-card h2 { font-size: 1.6rem; }
+.gate-card p { margin: 0; color: var(--ink-soft); font-size: 0.97rem; }
+#pw {
+  width: 100%; text-align: center; letter-spacing: 0.5em; padding: 14px 10px 14px 20px;
+  font-family: var(--font-display); font-size: 1.6rem;
+  background: #fff; border: 2px solid var(--blue-soft); border-radius: 16px; outline: none;
+}
+#pw:focus-visible { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(63, 111, 184, 0.2); }
+.btn {
+  cursor: pointer; border: 0; border-radius: 999px; padding: 13px 26px;
+  background: var(--blue); color: #fff; font-weight: 700; font-size: 1rem;
+  transition: transform .15s ease, background .15s ease;
+}
+.btn:hover { background: #335f9f; }
+.btn:active { transform: scale(0.97); }
+.btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.btn[disabled] { opacity: .55; cursor: not-allowed; }
+#gateMsg { min-height: 1.5em; color: var(--danger); font-weight: 600; font-size: 0.95rem; }
+.shake { animation: shake .4s; }
+@keyframes shake { 20%,60% { transform: translateX(-8px) } 40%,80% { transform: translateX(8px) } }
+
+#note { display: flex; flex-direction: column; gap: 28px; }
+.hello { text-align: center; display: flex; flex-direction: column; gap: 10px; }
+.hello h1 { font-size: clamp(1.9rem, 8vw, 2.6rem); line-height: 1.2; color: var(--blue); }
+.hello .pasti { font-family: var(--font-display); font-size: 1.35rem; color: var(--gold); margin: 0; }
+.hello .love {
+  font-family: var(--font-display); font-weight: 400; font-size: clamp(1.5rem, 6.5vw, 2rem);
+  margin: 6px 0 0; color: var(--ink);
+}
+.hello .love span { color: #E0527F; }
+.call {
+  background: var(--card); border: 2px solid var(--gold-soft); border-radius: 24px;
+  padding: 22px 22px; text-align: center; margin: 0;
+  box-shadow: 0 8px 24px rgba(185, 138, 30, 0.12);
+}
+.call .mini { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
+.call .mini svg { width: 22px; height: 22px; }
+.call .txt { display: block; font-size: 1.1rem; }
+
+.reply { display: flex; flex-direction: column; gap: 12px; }
+.reply h2 { font-size: 1.5rem; color: var(--blue); }
+.reply > p { margin: 0; color: var(--ink-soft); font-size: 0.97rem; }
+#replyText {
+  width: 100%; min-height: 120px; resize: vertical; padding: 14px 16px; line-height: 1.5;
+  background: #fff; border: 2px solid var(--blue-soft); border-radius: 18px; outline: none;
+}
+#replyText:focus-visible { border-color: var(--blue); box-shadow: 0 0 0 4px rgba(63, 111, 184, 0.2); }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+#replyStatus { min-width: 0; flex: 1 1 180px; font-size: 0.93rem; color: var(--ink-soft); }
+#replyStatus.ok { color: #2F6B3E; font-weight: 700; }
+#replyStatus.err { color: var(--danger); font-weight: 600; }
+.foot { text-align: center; color: var(--ink-soft); font-size: 0.85rem; }
+
+.wrap { position: relative; z-index: 1; }
+.twinkle { animation: twinkle 2.6s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+.twinkle.t2 { animation-delay: -0.9s; }
+.twinkle.t3 { animation-delay: -1.7s; }
+@keyframes twinkle {
+  0%, 100% { transform: scale(0.65) rotate(0deg); opacity: 0.55; }
+  50% { transform: scale(1.15) rotate(18deg); opacity: 1; }
+}
+.deco { display: flex; justify-content: center; gap: 12px; }
+.deco svg { width: 24px; height: 24px; animation: bob 2.8s ease-in-out infinite; }
+.deco svg:nth-child(2n) { animation-delay: -0.7s; }
+.deco svg:nth-child(3n) { animation-delay: -1.4s; }
+@keyframes wiggle { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+.hello .love span { display: inline-block; animation: wiggle 1.6s ease-in-out infinite; }
+.rain { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.rain svg { position: absolute; bottom: -60px; opacity: 0; animation: rise var(--d, 8s) linear forwards; }
+@keyframes rise {
+  0%   { transform: translate(0, 0) rotate(var(--r0, 0deg)); opacity: 0; }
+  10%  { opacity: .85; }
+  90%  { opacity: .7; }
+  100% { transform: translate(var(--x, 0px), -115vh) rotate(var(--r1, 0deg)); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float, .beat, .shake { animation: none; }
+  .rain { display: none; }
+  .twinkle, .deco svg, .hello .love span { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F6DC8F"/><stop offset="1" stop-color="#C99A2E"/>
+    </linearGradient>
+    <linearGradient id="gPink" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FF9DBD"/><stop offset="1" stop-color="#E0527F"/>
+    </linearGradient>
+    <linearGradient id="gBlue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A9C8F2"/><stop offset="1" stop-color="#4F7FC4"/>
+    </linearGradient>
+    <path id="hp" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    <path id="sp" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+  </defs>
+</svg>
+
+<div class="rain" id="rain" aria-hidden="true"></div>
+
+<main class="wrap">
+
+  <section id="gate" aria-label="Kunci halaman">
+    <form class="gate-card" id="gateForm" autocomplete="off">
+      <svg class="heart-art beat" viewBox="0 0 24 24" role="img" aria-label="Hati"><use href="#hp" fill="url(#gPink)" stroke="url(#gGold)" stroke-width="0.6"/></svg>
+      <h2>Buat Michael</h2>
+      <p>Masukin tanggal lahir kamu, 6 angka (tanggal, bulan, tahun 2 digit).</p>
+      <label for="pw" style="position:absolute;left:-9999px">Password</label>
+      <input id="pw" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="••••••" autocomplete="off">
+      <div id="gateMsg" role="alert"></div>
+      <button class="btn" type="submit">Buka</button>
+    </form>
+  </section>
+
+  <div id="note" hidden>
+    <section class="hello">
+      <svg class="heart-art" viewBox="0 0 260 230" role="img" aria-label="Hati-hati kecil bermelayangan">
+        <g class="float d1"><use href="#hp" x="18" y="40" width="40" height="40" fill="url(#gBlue)"/></g>
+        <g class="float d2"><use href="#hp" x="205" y="30" width="34" height="34" fill="url(#gGold)"/></g>
+        <g class="float d3"><use href="#hp" x="212" y="140" width="30" height="30" fill="url(#gBlue)"/></g>
+        <g class="float d1"><use href="#hp" x="26" y="150" width="30" height="30" fill="url(#gGold)"/></g>
+        <g class="beat"><use href="#hp" x="55" y="20" width="150" height="150" fill="url(#gPink)" stroke="url(#gGold)" stroke-width="0.35"/></g>
+        <g class="float d2"><use href="#hp" x="112" y="182" width="26" height="26" fill="url(#gPink)"/></g>
+        <g class="twinkle t1"><use href="#sp" x="2" y="92" width="22" height="22" fill="url(#gGold)"/></g>
+        <g class="twinkle t2"><use href="#sp" x="232" y="88" width="20" height="20" fill="url(#gGold)"/></g>
+        <g class="twinkle t3"><use href="#sp" x="84" y="0" width="16" height="16" fill="url(#gBlue)"/></g>
+        <g class="twinkle t1"><use href="#sp" x="176" y="0" width="14" height="14" fill="url(#gGold)"/></g>
+        <g class="twinkle t2"><use href="#sp" x="60" y="196" width="18" height="18" fill="url(#gBlue)"/></g>
+        <g class="twinkle t3"><use href="#sp" x="168" y="196" width="20" height="20" fill="url(#gGold)"/></g>
+      </svg>
+      <h1>semangat nguliknya, sayang.</h1>
+      <p class="pasti">pasti bisaa. doa yaa. semoga ibadah dan mainnya lancar yaa.</p>
+      <p class="love">i love u <span>so much</span></p>
+    </section>
+
+    <div class="deco" data-deco aria-hidden="true"></div>
+
+    <p class="call">
+      <span class="mini" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><use href="#hp" fill="url(#gBlue)"/></svg>
+        <svg viewBox="0 0 24 24"><use href="#hp" fill="url(#gGold)"/></svg>
+        <svg viewBox="0 0 24 24"><use href="#hp" fill="url(#gBlue)"/></svg>
+      </span>
+      <span class="txt">nanti habis kamu ngulik, kita call ya sayang. doa malam dan saling bilang kangen</span>
+    </p>
+
+    <div class="deco" data-deco aria-hidden="true"></div>
+
+    <section class="reply" aria-labelledby="replyTitle">
+      <h2 id="replyTitle">Balas di sini, Michael</h2>
+      <p>Tulis apa aja buat Natha. Balasan kamu langsung masuk ke email Natha.</p>
+      <label for="replyText" style="position:absolute;left:-9999px">Balasan</label>
+      <textarea id="replyText" maxlength="2000" placeholder="Tulis balasan kamu..."></textarea>
+      <div class="row">
+        <button class="btn" id="sendBtn" type="button">Kirim</button>
+        <div id="replyStatus" role="status"></div>
+      </div>
+    </section>
+
+    <p class="foot">made by natha for michael</p>
+  </div>
+</main>
+
+<script>
+(function () {
+  /* GANTI baris ini dengan link endpoint Formspree kamu, contoh: https://formspree.io/f/abcdwxyz */
+  var FORM_ENDPOINT = "https://formspree.io/f/xpppywjr";
+
+  var PASS = "110508";
+  var gate = document.getElementById("gate");
+  var note = document.getElementById("note");
+  var form = document.getElementById("gateForm");
+  var pw = document.getElementById("pw");
+  var gateMsg = document.getElementById("gateMsg");
+
+  function store(get, k, v) {
+    try { return get ? sessionStorage.getItem(k) : sessionStorage.setItem(k, v); } catch (e) { return null; }
+  }
+  var rainTimer = null;
+  function startRain() {
+    var box = document.getElementById("rain");
+    if (!box || rainTimer || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    var fills = ["url(#gPink)", "url(#gBlue)", "url(#gGold)", "url(#gPink)"];
+    var NS = "http://www.w3.org/2000/svg";
+    function spawn() {
+      if (document.hidden || box.childElementCount > 40) return;
+      var s = document.createElementNS(NS, "svg");
+      var size = 16 + Math.random() * 30;
+      s.setAttribute("viewBox", "0 0 24 24");
+      s.setAttribute("width", size);
+      s.setAttribute("height", size);
+      s.style.left = (Math.random() * 100) + "%";
+      s.style.setProperty("--d", (6 + Math.random() * 6) + "s");
+      s.style.setProperty("--x", (Math.random() * 120 - 60) + "px");
+      s.style.setProperty("--r0", (Math.random() * 40 - 20) + "deg");
+      s.style.setProperty("--r1", (Math.random() * 60 - 30) + "deg");
+      var u = document.createElementNS(NS, "use");
+      u.setAttribute("href", Math.random() < 0.35 ? "#sp" : "#hp");
+      u.setAttribute("fill", fills[Math.floor(Math.random() * fills.length)]);
+      s.appendChild(u);
+      s.addEventListener("animationend", function () { s.remove(); });
+      box.appendChild(s);
+    }
+    for (var i = 0; i < 8; i++) setTimeout(spawn, i * 180);
+    rainTimer = setInterval(spawn, 650);
+  }
+  function unlock() {
+    gate.hidden = true;
+    note.hidden = false;
+    store(false, "bm-open", "1");
+    window.scrollTo(0, 0);
+    startRain();
+  }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var v = pw.value.replace(/\D/g, "");
+    if (v === PASS) { unlock(); return; }
+    gateMsg.textContent = "Belum bener, coba lagi ya sayang.";
+    form.classList.remove("shake"); void form.offsetWidth; form.classList.add("shake");
+    pw.value = ""; pw.focus();
+  });
+  pw.addEventListener("input", function () { gateMsg.textContent = ""; });
+
+  var sendBtn = document.getElementById("sendBtn");
+  var statusEl = document.getElementById("replyStatus");
+  var textEl = document.getElementById("replyText");
+  function setStatus(t, cls) { statusEl.textContent = t; statusEl.className = cls || ""; }
+
+  sendBtn.addEventListener("click", function () {
+    var text = textEl.value.trim();
+    if (!text) { setStatus("Tulis dulu balasannya ya.", "err"); return; }
+    if (FORM_ENDPOINT.indexOf("formspree.io/f/") === -1) {
+      setStatus("Kolom balasan belum disambung. Kabarin Nadine ya.", "err");
+      return;
+    }
+    sendBtn.disabled = true; setStatus("Mengirim...");
+    fetch(FORM_ENDPOINT, {
+      method: "POST",
+      headers: { "Accept": "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ pesan: text, dari: "Michael", waktu: new Date().toISOString() })
+    }).then(function (res) {
+      if (!res.ok) throw new Error("bad status");
+      textEl.value = "";
+      setStatus("Terkirim. Makasih sayang.", "ok");
+    }).catch(function () {
+      setStatus("Gagal ngirim, coba lagi sebentar lagi.", "err");
+    }).then(function () { sendBtn.disabled = false; });
+  });
+
+  var decoSeq = [["#sp", "url(#gGold)"], ["#hp", "url(#gPink)"], ["#sp", "url(#gBlue)"], ["#hp", "url(#gGold)"], ["#sp", "url(#gBlue)"], ["#hp", "url(#gPink)"], ["#sp", "url(#gGold)"]];
+  Array.prototype.forEach.call(document.querySelectorAll("[data-deco]"), function (el) {
+    var NS = "http://www.w3.org/2000/svg";
+    decoSeq.forEach(function (d) {
+      var s = document.createElementNS(NS, "svg");
+      s.setAttribute("viewBox", "0 0 24 24");
+      var u = document.createElementNS(NS, "use");
+      u.setAttribute("href", d[0]);
+      u.setAttribute("fill", d[1]);
+      s.appendChild(u);
+      el.appendChild(s);
+    });
+  });
+
+  if (store(true, "bm-open") === "1") unlock();
+})();
+</script>
+</body>
+</html>
